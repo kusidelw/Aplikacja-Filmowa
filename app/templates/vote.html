@@ -25,7 +25,7 @@
             <!-- Action Buttons (Początkowe) -->
             <div id="action-buttons" class="flex flex-col sm:flex-row gap-4 w-full px-4 transition-all duration-300">
                 <!-- Nie oglądałem Form -->
-                <form action="{{ url_for('rate_submit') }}" method="POST" class="flex-1">
+                <form action="{{ url_for('main.rate_submit') }}" method="POST" class="flex-1">
                     <input type="hidden" name="media_id" value="{{ film.id }}">
                     <input type="hidden" name="decyzja" value="NIE">
                     <input type="hidden" name="ocena" value="0">
@@ -43,7 +43,7 @@
             <!-- Panel Ocen (Ukryty domyślnie) -->
             <div id="rating-panel" class="hidden w-full transition-all duration-300">
                 <p class="text-center text-slate-700 dark:text-gray-300 font-bold mb-4">Jak oceniasz ten film?</p>
-                <form action="{{ url_for('rate_submit') }}" method="POST">
+                <form action="{{ url_for('main.rate_submit') }}" method="POST">
                     <input type="hidden" name="media_id" value="{{ film.id }}">
                     <input type="hidden" name="decyzja" value="TAK">
                     <div class="flex justify-center gap-2 flex-wrap px-2">
@@ -87,7 +87,7 @@
         <p class="text-slate-600 dark:text-gray-400 text-lg text-center max-w-md">
             Obejrzałeś i oceniłeś wszystkie dostępne nowości. Wróć później.
         </p>
-        <a href="{{ url_for('home') }}" class="mt-8 px-6 py-3 bg-slate-200 dark:bg-white/10 rounded-xl font-bold text-slate-800 dark:text-white">Wróc na Stronę Główną</a>
+        <a href="{{ url_for('main.home') }}" class="mt-8 px-6 py-3 bg-slate-200 dark:bg-white/10 rounded-xl font-bold text-slate-800 dark:text-white">Wróc na Stronę Główną</a>
     </div>
     {% endif %}
 </div>

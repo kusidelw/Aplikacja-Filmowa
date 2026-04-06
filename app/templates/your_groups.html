@@ -46,7 +46,7 @@
                 </div>
             </div>
             
-            <a href="{{ url_for('match', grupa_id=grupa.id) }}" class="flex items-center justify-center gap-2 w-full py-4 bg-slate-50 dark:bg-white/5 group-hover:bg-pink-50 dark:group-hover:bg-gradient-to-r group-hover:from-pink-500/20 group-hover:to-purple-500/20 text-sm font-bold transition-all border-t border-slate-200 dark:border-white/5 text-slate-700 dark:text-pink-100 group-hover:text-pink-700">
+            <a href="{{ url_for('main.match', grupa_id=grupa.id) }}" class="flex items-center justify-center gap-2 w-full py-4 bg-slate-50 dark:bg-white/5 group-hover:bg-pink-50 dark:group-hover:bg-gradient-to-r group-hover:from-pink-500/20 group-hover:to-purple-500/20 text-sm font-bold transition-all border-t border-slate-200 dark:border-white/5 text-slate-700 dark:text-pink-100 group-hover:text-pink-700">
                 Wejdź do grupy <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
             </a>
         </div>
@@ -64,7 +64,7 @@
             <h2 class="text-2xl font-extrabold mb-2 text-slate-800 dark:text-white">Załóż nową grupę</h2>
             <p class="text-slate-500 dark:text-gray-400 text-sm mb-8 font-medium">Stwórz nową przestrzeń, zaproś znajomych i zobaczcie co was łączy.</p>
             
-            <form action="{{ url_for('create_group') }}" method="POST" class="space-y-6">
+            <form action="{{ url_for('main.create_group') }}" method="POST" class="space-y-6">
                 <div>
                     <label class="block text-sm font-bold text-slate-700 dark:text-gray-300 mb-2">Nazwa grupy</label>
                     <input type="text" name="nazwa_grupy" required placeholder="np. Rodzinka, Ekipa z pracy"

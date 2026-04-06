@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FilmMatch</title>
-    <!-- Tailwind CSS (CDN do prototypowania, docelowo można skompilować) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
@@ -23,46 +21,40 @@
 </head>
 <body class="bg-slate-50 dark:bg-[#0c0e14] text-slate-900 dark:text-gray-200 transition-colors duration-300 min-h-screen relative overflow-x-hidden font-sans">
 
-    <!-- Tło Glassmorphism -->
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
         <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-pink-400/20 dark:bg-pink-400/15 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style="animation-duration: 8s;"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-teal-400/20 dark:bg-teal-400/15 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style="animation-duration: 10s;"></div>
         <div class="absolute top-[20%] right-[20%] w-[30vw] h-[30vw] bg-purple-400/20 dark:bg-purple-400/15 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen animate-pulse" style="animation-duration: 12s;"></div>
     </div>
 
-    <!-- Navbar -->
     <nav class="fixed top-0 w-full z-40 bg-white/70 dark:bg-[#0c0e14]/60 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/5 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ url_for('home') }}" class="flex items-center gap-2 text-2xl font-black bg-gradient-to-r from-pink-500 via-purple-500 to-teal-500 dark:from-pink-400 dark:via-purple-400 dark:to-teal-400 bg-clip-text text-transparent">
+                    <a href="{{ url_for('main.home') }}" class="flex items-center gap-2 text-2xl font-black bg-gradient-to-r from-pink-500 via-purple-500 to-teal-500 dark:from-pink-400 dark:via-purple-400 dark:to-teal-400 bg-clip-text text-transparent">
                         <i data-lucide="film" class="text-pink-500 dark:text-pink-400"></i>
                         FilmMatch
                     </a>
                 </div>
 
                 {% if current_user.is_authenticated %}
-                <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-1">
-                    <a href="{{ url_for('home') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
+                    <a href="{{ url_for('main.home') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
                         <i data-lucide="home" class="w-5 h-5"></i> Główna
                     </a>
-                    <a href="{{ url_for('groups') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
+                    <a href="{{ url_for('main.groups') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
                         <i data-lucide="users" class="w-5 h-5"></i> Grupy
                     </a>
-                    <a href="{{ url_for('rate') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
+                    <a href="{{ url_for('main.rate') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
                         <i data-lucide="star" class="w-5 h-5"></i> Ocenianie
                     </a>
-                    <a href="{{ url_for('my_votes') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
+                    <a href="{{ url_for('main.my_votes') }}" class="px-3 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-pink-500 dark:hover:text-pink-200">
                         <i data-lucide="clapperboard" class="w-5 h-5"></i> Moje Oceny
                     </a>
                 </div>
                 {% endif %}
 
-                <!-- Right Side Tools -->
                 <div class="flex items-center space-x-3 sm:space-x-4">
-                    <!-- Theme Toggle -->
                     <button onclick="toggleTheme()" class="p-2 text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-pink-300 transition-colors rounded-full hover:bg-slate-200/50 dark:hover:bg-white/5" title="Zmień motyw">
                         <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
                         <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
@@ -70,16 +62,16 @@
 
                     {% if current_user.is_authenticated %}
                     <div class="flex items-center space-x-3 sm:space-x-4">
-                        <a href="{{ url_for('settings') }}" class="text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-pink-300 transition-colors p-2 rounded-full hover:bg-slate-200/50 dark:hover:bg-white/5 hidden sm:block">
+                        <a href="{{ url_for('main.settings') }}" class="text-slate-500 hover:text-slate-800 dark:text-gray-400 dark:hover:text-pink-300 transition-colors p-2 rounded-full hover:bg-slate-200/50 dark:hover:bg-white/5 hidden sm:block">
                             <i data-lucide="settings" class="w-5 h-5"></i>
                         </a>
-                        <a href="{{ url_for('logout') }}" class="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-pink-600 dark:text-gray-400 dark:hover:text-pink-400 transition-colors">
+                        <a href="{{ url_for('main.logout') }}" class="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-pink-600 dark:text-gray-400 dark:hover:text-pink-400 transition-colors">
                             <i data-lucide="log-out" class="w-5 h-5"></i>
                             <span class="hidden sm:inline">Wyloguj</span>
                         </a>
                     </div>
                     {% else %}
-                    <a href="{{ url_for('login') }}" class="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm font-bold hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] transition-all">
+                    <a href="{{ url_for('main.login') }}" class="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm font-bold hover:shadow-[0_0_20px_rgba(236,72,153,0.4)] transition-all">
                         <i data-lucide="log-in" class="w-4 h-4"></i> Zaloguj się
                     </a>
                     {% endif %}
@@ -88,15 +80,12 @@
         </div>
     </nav>
 
-    <!-- Content -->
     <main class="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[calc(100vh-64px)] relative z-10">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Inicjalizacja ikon Lucide -->
     <script>
         lucide.createIcons();
-        
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
         }
