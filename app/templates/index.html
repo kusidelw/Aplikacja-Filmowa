@@ -1,42 +1,39 @@
-{% extends "base.html" %}
-
-{% block title %}Strona Główna - Match{% endblock %}
-
+{% extends "base.html" %} {% block title %}Strona Główna - Match{% endblock %}
 {% block content %}
-    <header class="hero">
-        <h1>Oceń filmy, które znasz</h1>
-        <p>Sprawdźmy, czy macie ten sam gust!</p>
-    </header>
+<header class="hero">
+  <h1>Oceń filmy, które znasz</h1>
+  <p>Sprawdźmy, czy macie ten sam gust!</p>
+</header>
 
-    {% if results %}
-    <div class="result-card">
-        <div class="match-score">{{ results.match_total }}%</div>
-        <div class="match-details">
-            <p>Podobieństwo gustu: <strong>{{ results.taste_similarity }}%</strong></p>
-            <p>Wspólne tytuły: <strong>{{ results.common_movies_count }}</strong></p>
-        </div>
+{% if results %}
+<div class="result-card">
+  <div class="match-score">{{ results.match_total }}%</div>
+  <div class="match-details">
+    <p>Podobieństwo gustu: <strong>{{ results.taste_similarity }}%</strong></p>
+    <p>Wspólne tytuły: <strong>{{ results.common_movies_count }}</strong></p>
+  </div>
+</div>
+{% endif %}
+
+<form method="POST" class="movie-grid">
+  {% for movie in movies %}
+  <div class="movie-card">
+    <h3>{{ movie.tytul }}</h3>
+    <div class="select-wrapper">
+      <select name="movie_{{ movie.id }}">
+        <option value="0">Nie widziałam</option>
+        <option value="1">1 - Nie lubię</option>
+        <option value="2">2 - Słaby</option>
+        <option value="3">3 - Obojętny</option>
+        <option value="4">4 - Lubię</option>
+        <option value="5">5 - Uwielbiam</option>
+      </select>
     </div>
-    {% endif %}
+  </div>
+  {% endfor %}
 
-    <form method="POST" class="movie-grid">
-        {% for movie in movies %}
-        <div class="movie-card">
-            <h3>{{ movie.title }}</h3>
-            <div class="select-wrapper">
-                <select name="movie_{{ movie.id }}">
-                    <option value="0">Nie widziałam</option>
-                    <option value="1">1 - Nie lubię</option>
-                    <option value="2">2 - Słaby</option>
-                    <option value="3">3 - Obojętny</option>
-                    <option value="4">4 - Lubię</option>
-                    <option value="5">5 - Uwielbiam</option>
-                </select>
-            </div>
-        </div>
-        {% endfor %}
-        
-        <div class="submit-area">
-            <button type="submit" class="btn-primary">Oblicz Match</button>
-        </div>
-    </form>
+  <div class="submit-area">
+    <button type="submit" class="btn-primary">Oblicz Match</button>
+  </div>
+</form>
 {% endblock %}

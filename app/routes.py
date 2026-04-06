@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from app.models import db, Media, Glos, Decyzja
 from app.services import wypelnij_baze_trending, get_match_between_users
 from app.models import Uzytkownik, Grupa
@@ -6,6 +6,40 @@ from app.models import Uzytkownik, Grupa
 main_bp = Blueprint("main", __name__)
 
 
+
+@main_bp.route("/", methods=["GET", "POST"])
+def index():
+    # 1. Pobieramy filmy z bazy
+    movies = Media.query.all()
+    match_results = None
+
+    if request.method == "POST":
+        # Tymczasowo zakładamy: Ty to ID=1, Twoja połówka to ID=2, Grupa=1
+        u_id = 1 
+        g_id = 1
+
+        # 2. Zapisujemy Twoje głosy z formularza do bazy
+        for movie in movies:
+            rating_val = request.form.get(f'movie_{movie.id}', 0)
+            rating_val = int(rating_val)
+
+            if rating_val > 0:  # Zapisujemy tylko jeśli widziałaś
+                istniejacy_glos = Glos.query.filter_by(
+                    uzytkownik_id=u_id, media_id=movie.id, grupa_id=g_id
+                ).first()
+
+                if istniejacy_glos:
+                    istniejacy_glos.ocena = rating_val
+                else:
+                    nowy_glos = Glos(uzytkownik_id=u_id, media_id=movie.id, grupa_id=g_id, ocena=rating_val)
+                    db.session.add(nowy_glos)
+        
+        db.session.commit()
+
+        # 3. Liczymy match z drugą osobą (u2=2)
+        match_results = get_match_between_users(1, 2, 1)
+
+    return render_template("index.html", movies=movies, results=match_results)
 # 1. Pobieranie listy filmów z bazy (do wyświetlenia w aplikacji)
 @main_bp.route("/movies", methods=["GET"])
 def get_movies():
