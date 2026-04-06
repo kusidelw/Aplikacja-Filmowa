@@ -64,5 +64,7 @@ class Glos(db.Model):
     )
     media_id = db.Column(db.Integer, db.ForeignKey("media.id"), nullable=False)
     grupa_id = db.Column(db.Integer, db.ForeignKey("grupy.id"), nullable=False)
-    decyzja = db.Column(db.Enum(Decyzja), nullable=False)
+    # Zmieniamy: dodajemy ocenę liczbową 1-5
+    ocena = db.Column(db.Integer, nullable=False)
+    decyzja = db.Column(db.Enum(Decyzja), nullable=True)  # Opcjonalnie zostaje
     data_glosu = db.Column(db.DateTime, default=datetime.utcnow)
