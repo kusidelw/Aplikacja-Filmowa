@@ -1,0 +1,55 @@
+<div class="match-header-card">
+    <div class="glow-pink"></div>
+    <div class="glow-teal"></div>
+    
+    <div class="relative z-10 flex flex-col md:flex-row items-center gap-12">
+        <div class="progress-container">
+            <svg class="progress-ring" viewBox="0 0 100 100">
+                <circle class="progress-ring__circle" cx="50" cy="50" r="45" 
+                        fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8" />
+                
+                <circle class="progress-ring__circle" cx="50" cy="50" r="45" 
+                        fill="none" stroke="url(#matchGradient)" stroke-width="8"
+                        stroke-dasharray="283" 
+                        style="stroke-dashoffset: calc(283 - (283 * {{ match.match_total }}) / 100);" />
+                
+                <defs>
+                    <linearGradient id="matchGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#f472b6" />
+                        <stop offset="100%" stop-color="#2dd4bf" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            
+            <div class="match-score-text">
+                <span class="gradient-text-match">{{ match.match_total }}%</span>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">Match</span>
+            </div>
+        </div>
+
+        <div class="flex-1 space-y-6">
+            <h1 class="text-3xl font-black text-white">{{ group.nazwa_grupy }}</h1>
+            <p class="text-gray-300">Podobieństwo waszego gustu obliczone na skali 1-10.</p>
+            
+            <div class="bg-black/20 p-5 rounded-2xl border border-white/5 space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Podobieństwo ocen (70%)</span>
+                    <span class="font-bold text-pink-300">{{ match.taste_similarity }}%</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Wspólna baza (30%)</span>
+                    <span class="font-bold text-teal-300">{{ match.coverage }}%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-12 flex flex-col sm:flex-row gap-4 border-t border-white/10 pt-8">
+        <button class="btn-random btn-random-pink">
+            <i data-lucide="dices"></i> Losuj z nieoglądanych
+        </button>
+        <button class="btn-random btn-random-teal">
+            <i data-lucide="wand-2"></i> Losuj z ulubionych
+        </button>
+    </div>
+</div>

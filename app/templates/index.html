@@ -1,39 +1,19 @@
-{% extends "base.html" %} {% block title %}Strona Główna - Match{% endblock %}
+{% extends "base.html" %}
+
 {% block content %}
-<header class="hero">
-  <h1>Oceń filmy, które znasz</h1>
-  <p>Sprawdźmy, czy macie ten sam gust!</p>
-</header>
-
-{% if results %}
-<div class="result-card">
-  <div class="match-score">{{ results.match_total }}%</div>
-  <div class="match-details">
-    <p>Podobieństwo gustu: <strong>{{ results.taste_similarity }}%</strong></p>
-    <p>Wspólne tytuły: <strong>{{ results.common_movies_count }}</strong></p>
-  </div>
+<div class="hero-card">
+    <h1>Odkryj wasz wspólny filmowy świat</h1>
+    <a href="/register" class="btn-primary">Dołącz teraz</a>
 </div>
-{% endif %}
 
-<form method="POST" class="movie-grid">
-  {% for movie in movies %}
-  <div class="movie-card">
-    <h3>{{ movie.tytul }}</h3>
-    <div class="select-wrapper">
-      <select name="movie_{{ movie.id }}">
-        <option value="0">Nie widziałam</option>
-        <option value="1">1 - Nie lubię</option>
-        <option value="2">2 - Słaby</option>
-        <option value="3">3 - Obojętny</option>
-        <option value="4">4 - Lubię</option>
-        <option value="5">5 - Uwielbiam</option>
-      </select>
+<div class="movie-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 3rem;">
+    {% for movie in movies %}
+    <div class="movie-card">
+        <img src="{{ movie.url_plakatu }}" style="width: 100%; aspect-ratio: 2/3; object-fit: cover;">
+        <div style="padding: 1.25rem;">
+            <h3>{{ movie.tytul }}</h3>
+        </div>
     </div>
-  </div>
-  {% endfor %}
-
-  <div class="submit-area">
-    <button type="submit" class="btn-primary">Oblicz Match</button>
-  </div>
-</form>
+    {% endfor %}
+</div>
 {% endblock %}
