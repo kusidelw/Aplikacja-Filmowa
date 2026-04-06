@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="logo">🎬 MovieMatch</a>
+   <nav class="navbar">
+    <div class="container">
+        <a href="/" class="logo">🎬 MovieMatch</a>
+        <div class="nav-links">
             <a href="/" class="oceniaj">Oceń filmy</a>
-            <a href="/" class="oceniaj">Logowanie</a>
+            <a href="/login" class="oceniaj">Logowanie</a>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <main class="container">
         {% block content %}{% endblock %}
