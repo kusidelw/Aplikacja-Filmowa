@@ -48,8 +48,9 @@ class Grupa(db.Model):
 class Media(db.Model):
     __tablename__ = "media"
     id = db.Column(db.Integer, primary_key=True)
+    xmdb_id = db.Column(db.String(20), unique=True, nullable=False)  # np. 'tt0111161'
     tytul = db.Column(db.String(200), nullable=False)
-    typ = db.Column(db.Enum(TypMedia), nullable=False, default=TypMedia.FILM)
+    typ = db.Column(db.Enum(TypMedia), nullable=False)
     opis = db.Column(db.Text, nullable=True)
     rok_produkcji = db.Column(db.Integer, nullable=True)
     url_plakatu = db.Column(db.String(500), nullable=True)
