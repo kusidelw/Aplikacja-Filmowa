@@ -12,4 +12,9 @@ def create_app():
         # To stworzy plik bazy (np. sqlite) przy pierwszym uruchomieniu
         db.create_all()
 
+
+
+    from .routes import main_bp
+    app.register_blueprint(main_bp)
+
     return app
