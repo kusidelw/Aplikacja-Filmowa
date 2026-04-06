@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+    <div>
+        <h1 class="text-3xl font-extrabold flex items-center gap-3 mb-2 text-slate-800 dark:text-white">
+            Ustawienia Konta
+        </h1>
+        <p class="text-slate-500 dark:text-gray-400 font-medium">Zarządzaj swoim profilem.</p>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-8">
+        <!-- Content -->
+        <div class="flex-1 bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-xl">
+            <form action="{{ url_for('update_settings') }}" method="POST" class="space-y-6">
+                
+                <h2 class="text-2xl font-bold mb-6 text-slate-800 dark:text-white">Dane osobowe</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-600 dark:text-gray-400 mb-2">Imię</label>
+                        <input type="text" name="imie" value="{{ current_user.imie }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-600 dark:text-gray-400 mb-2">Nazwisko</label>
+                        <input type="text" name="nazwisko" value="{{ current_user.nazwisko }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500" />
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-bold text-slate-600 dark:text-gray-400 mb-2">Adres Email</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                            <input type="email" name="email" value="{{ current_user.email }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 flex justify-end">
+                    <button type="submit" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-xl hover:shadow-lg transition-all hover:scale-105">
+                        <i data-lucide="save" class="w-4 h-4"></i> Zapisz zmiany
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

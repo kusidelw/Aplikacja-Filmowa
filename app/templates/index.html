@@ -1,19 +1,158 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="hero-card">
-    <h1>Odkryj wasz wspólny filmowy świat</h1>
-    <a href="/register" class="btn-primary">Dołącz teraz</a>
-</div>
-
-<div class="movie-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 3rem;">
-    {% for movie in movies %}
-    <div class="movie-card">
-        <img src="{{ movie.url_plakatu }}" style="width: 100%; aspect-ratio: 2/3; object-fit: cover;">
-        <div style="padding: 1.25rem;">
-            <h3>{{ movie.tytul }}</h3>
+<div class="space-y-12 fade-in">
+    {% if not current_user.is_authenticated %}
+    <!-- Baner Powitalny (Niezalogowani) -->
+    <div class="relative rounded-[3rem] overflow-hidden bg-white/60 dark:bg-black/30 backdrop-blur-2xl border border-slate-200/50 dark:border-white/10 p-8 md:p-16 text-center shadow-2xl">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-400 via-purple-400 to-teal-400"></div>
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=2070')] bg-cover bg-center opacity-[0.03] dark:opacity-[0.05] mix-blend-overlay"></div>
+        
+        <div class="relative z-10 max-w-3xl mx-auto space-y-8">
+            <h1 class="text-5xl md:text-7xl font-black tracking-tight leading-tight text-slate-800 dark:text-white">
+                Odkryj wasz wspólny <br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-teal-500 dark:from-pink-400 dark:to-teal-400 drop-shadow-sm">filmowy świat</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 dark:text-gray-300 font-medium">
+                Nie wiesz, co obejrzeć z partnerem lub przyjaciółmi? Zaloguj się, oceniaj filmy i sprawdź swój % dopasowania z innymi. FilmMatch zrobi resztę!
+            </p>
+            <a href="{{ url_for('register') }}" class="inline-flex items-center gap-2 px-10 py-5 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-extrabold text-lg hover:from-pink-400 hover:to-purple-400 hover:shadow-[0_0_30px_rgba(236,72,153,0.4)] transition-all transform hover:-translate-y-1">
+                Dołącz teraz
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </a>
         </div>
     </div>
-    {% endfor %}
+    {% else %}
+    <!-- Widok Zalogowanego -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Lewa kolumna: Feed & Rate -->
+        <div class="lg:col-span-2 space-y-8">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-extrabold flex items-center gap-2 text-slate-800 dark:text-white">
+                    <i data-lucide="activity" class="text-teal-500 dark:text-teal-400 w-6 h-6"></i> Co słychać w grupach
+                </h2>
+            </div>
+            
+            <div class="space-y-4">
+                {% for aktywnosc in aktywnosci %}
+                <div class="bg-white/60 dark:bg-black/20 backdrop-blur-md border border-slate-200/60 dark:border-white/5 rounded-[2rem] p-6 hover:bg-slate-50 dark:hover:bg-white/[0.05] dark:hover:border-white/10 shadow-sm dark:shadow-none transition-all flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center group">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-pink-100 dark:bg-gradient-to-br dark:from-pink-500/20 dark:to-teal-500/20 flex items-center justify-center font-black text-xl text-pink-600 dark:text-pink-300 border border-pink-200 dark:border-pink-400/20 shadow-inner">
+                            {{ aktywnosc.uzytkownik.imie[0] if aktywnosc.uzytkownik.imie else 'U' }}
+                        </div>
+                        <div class="py-1">
+                            <p class="text-sm text-slate-500 dark:text-gray-400 mb-1">
+                                <span class="font-bold text-slate-700 dark:text-gray-200">{{ aktywnosc.uzytkownik.imie }}</span> z grupy <span class="text-teal-600 dark:text-teal-300 font-semibold">{{ aktywnosc.grupa.nazwa_grupy }}</span> ocenił/a
+                            </p>
+                            <h3 class="font-extrabold text-xl text-slate-800 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-200 transition-colors">{{ aktywnosc.media.tytul }}</h3>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <div class="flex items-center gap-1.5 bg-yellow-100 dark:bg-yellow-400/10 text-yellow-600 dark:text-yellow-300 px-4 py-1.5 rounded-xl text-sm font-black border border-yellow-200 dark:border-yellow-400/20">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i> {{ aktywnosc.ocena }}/10
+                        </div>
+                        <span class="text-xs text-slate-400 dark:text-gray-500 font-medium">{{ aktywnosc.data_glosu.strftime('%Y-%m-%d') }}</span>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-slate-500 dark:text-gray-400 text-center py-4">Brak najnowszych aktywności. Dodaj znajomych do grup!</p>
+                {% endfor %}
+            </div>
+
+            <!-- Tryb Oceniania Banner -->
+            <a href="{{ url_for('rate') }}" class="block bg-gradient-to-r from-pink-500 to-purple-500 rounded-[2.5rem] p-8 md:p-10 shadow-xl hover:shadow-[0_0_30px_rgba(236,72,153,0.4)] transition-all transform hover:-translate-y-1 relative overflow-hidden group mt-8">
+               <div class="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -mr-20 -mt-20 group-hover:bg-white/30 transition-colors"></div>
+               <div class="relative z-10 flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
+                 <div class="bg-white/20 p-4 rounded-3xl backdrop-blur-sm">
+                   <i data-lucide="wand-2" class="w-12 h-12 text-white drop-shadow-md"></i>
+                 </div>
+                 <div>
+                   <h3 class="font-black text-3xl text-white mb-2">Tryb Oceniania</h3>
+                   <p class="text-pink-100 font-medium text-lg">Odkrywaj i oceniaj nowe filmy by ulepszyć swoje dopasowania ze znajomymi!</p>
+                 </div>
+               </div>
+            </a>
+        </div>
+
+        <!-- Prawa kolumna: Sidebar (Aktywna Grupa) -->
+        <div class="space-y-6">
+            {% if aktywna_grupa %}
+            <div class="bg-white/80 dark:bg-black/30 backdrop-blur-xl rounded-[2.5rem] p-8 border border-pink-200 dark:border-pink-500/30 relative overflow-hidden shadow-xl dark:shadow-[0_0_40px_rgba(236,72,153,0.1)]">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-pink-400 to-purple-400"></div>
+                <div class="absolute -top-10 -right-10 p-4 opacity-[0.03] dark:opacity-10">
+                    <i data-lucide="heart" class="w-40 h-40 text-pink-500 dark:text-pink-400 fill-current"></i>
+                </div>
+                <h3 class="text-sm font-bold text-pink-600 dark:text-pink-300 uppercase tracking-widest mb-6 flex items-center gap-2 z-10 relative">
+                    Aktywna grupa
+                </h3>
+                
+                <div class="relative z-10 flex flex-col items-center text-center space-y-5">
+                    <div class="relative">
+                        <div class="w-24 h-24 rounded-3xl bg-slate-200 dark:bg-white/10 flex items-center justify-center border border-slate-300 dark:border-white/20 shadow-2xl">
+                            <i data-lucide="users" class="w-10 h-10 text-slate-500 dark:text-gray-400"></i>
+                        </div>
+                        <div class="absolute -bottom-3 -right-3 bg-gradient-to-br from-pink-500 to-purple-500 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-4 border-white dark:border-[#13151f] shadow-lg text-white">
+                            {{ aktywna_grupa.czlonkowie|length }}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-2xl text-slate-800 dark:text-white">{{ aktywna_grupa.nazwa_grupy }}</h4>
+                        <p class="text-sm text-slate-500 dark:text-gray-400 font-medium mt-1">Główny match</p>
+                    </div>
+                    
+                    <div class="w-full space-y-3 pt-6 border-t border-slate-200 dark:border-white/10">
+                        <div class="flex justify-between text-sm font-bold">
+                            <span class="text-slate-500 dark:text-gray-400">Dopasowanie</span>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-teal-500 dark:from-pink-400 dark:to-teal-400 text-lg">{{ match_procent|default(0) }}%</span>
+                        </div>
+                        <div class="h-3 w-full bg-slate-200 dark:bg-black/40 rounded-full overflow-hidden border border-slate-300/50 dark:border-white/5">
+                            <div class="h-full bg-gradient-to-r from-pink-400 via-purple-400 to-teal-400 rounded-full" style="width: {{ match_procent|default(0) }}%;"></div>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ url_for('match', grupa_id=aktywna_grupa.id) }}" class="w-full mt-4 flex items-center justify-center gap-2 px-4 py-4 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-2xl font-bold transition-all text-slate-700 dark:text-white group">
+                        Zobacz statystyki <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Sekcja: Polecane -->
+    <section class="space-y-6 pt-8 border-t border-slate-200/60 dark:border-white/5">
+        <div class="flex items-center justify-between">
+            <h2 class="text-3xl font-extrabold flex items-center gap-3 text-slate-800 dark:text-white">
+                <i data-lucide="play" class="text-purple-500 dark:text-purple-400 w-8 h-8 fill-current"></i> Polecane
+            </h2>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {% for film in polecane_filmy %}
+            <div class="group relative rounded-[2rem] overflow-hidden bg-white dark:bg-black/30 backdrop-blur-md border border-slate-200/60 dark:border-white/10 shadow-xl flex flex-col h-full hover:border-purple-300 dark:hover:border-purple-400/50 transition-all duration-500">
+                <div class="aspect-[2/3] relative overflow-hidden">
+                    <img src="{{ film.url_plakatu }}" alt="{{ film.tytul }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent opacity-90 group-hover:opacity-100 transition-opacity"></div>
+                    
+                    {% if current_user.is_authenticated %}
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-black/40 backdrop-blur-sm">
+                        <a href="{{ url_for('rate', media_id=film.id) }}" class="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold hover:from-pink-400 hover:to-purple-400 transform hover:scale-105 transition-all shadow-[0_0_20px_rgba(236,72,153,0.4)] flex items-center gap-2">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i> Oceń
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="p-5 flex-1 flex flex-col z-10 -mt-8">
+                    <h3 class="font-extrabold text-lg line-clamp-1 group-hover:text-pink-300 transition-colors text-white">{{ film.tytul }}</h3>
+                    <div class="flex items-center justify-between mt-auto pt-3">
+                        <span class="text-xs text-teal-300 font-bold bg-teal-500/20 backdrop-blur-sm border border-teal-500/30 px-2 py-1 rounded-lg">Film</span>
+                        <span class="text-xs text-gray-300 font-mono font-bold">{{ film.rok_produkcji }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 </div>
 {% endblock %}
