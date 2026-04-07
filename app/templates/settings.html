@@ -4,39 +4,94 @@
 <div class="max-w-4xl mx-auto space-y-8">
     <div>
         <h1 class="text-3xl font-extrabold flex items-center gap-3 mb-2 text-slate-800 dark:text-white">
+            <i data-lucide="settings" class="w-8 h-8 text-pink-500 dark:text-pink-400"></i>
             Ustawienia Konta
         </h1>
-        <p class="text-slate-500 dark:text-gray-400 font-medium">Zarządzaj swoim profilem.</p>
+        <p class="text-slate-500 dark:text-gray-400 font-medium">Zarządzaj swoim profilem i preferencjami gatunkowymi.</p>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-8">
+    <div class="flex flex-col gap-8">
         <!-- Content -->
         <div class="flex-1 bg-white/80 dark:bg-black/20 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-8 shadow-xl">
             <form action="{{ url_for('main.update_settings') }}" method="POST" class="space-y-6">
                 
+                <!-- Sekcja: Dane osobowe -->
                 <h2 class="text-2xl font-bold mb-6 text-slate-800 dark:text-white">Dane osobowe</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-bold text-slate-600 dark:text-gray-400 mb-2">Imię</label>
-                        <input type="text" name="imie" value="{{ current_user.imie }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500" />
+                        <div class="relative">
+                            <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                            <input type="text" name="imie" value="{{ current_user.imie }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500 shadow-sm" />
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-bold text-slate-600 dark:text-gray-400 mb-2">Nazwisko</label>
-                        <input type="text" name="nazwisko" value="{{ current_user.nazwisko }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500" />
+                        <div class="relative">
+                            <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                            <input type="text" name="nazwisko" value="{{ current_user.nazwisko }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500 shadow-sm" />
+                        </div>
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-slate-600 dark:text-gray-400 mb-2">Adres Email</label>
                         <div class="relative">
                             <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                            <input type="email" name="email" value="{{ current_user.email }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500" />
+                            <input type="email" name="email" value="{{ current_user.email }}" class="w-full bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl pl-12 pr-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-pink-500 shadow-sm" />
                         </div>
+                    </div>
+                </div>
+
+                <!-- Sekcja: Preferencje gatunkowe -->
+                <div class="mt-12 pt-8 border-t border-slate-200 dark:border-white/10">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 dark:from-pink-400 dark:to-purple-400 mb-2">Ulubione gatunki filmowe</h2>
+                        <p class="text-slate-500 dark:text-gray-400 text-sm font-medium">Oceń jak bardzo lubisz poszczególne kategorie (1-10). Pomoże to nam w lepszym dobieraniu filmów podczas "Losowania z lubionych".</p>
+                    </div>
+
+                    <!-- Definiujemy listę gatunków w Jinja (można to też podać z backendu jako zmienną `kategorie`) -->
+                    {% set domyslne_gatunki = ['Akcja', 'Kryminał', 'Dramat', 'Horror', 'Komedia', 'Romans', 'Sci-Fi', 'Fantasy', 'Animacja', 'Dokumentalny'] %}
+                    
+                    <!-- Pobieramy preferencje z JSON, upewniając się że słownik istnieje -->
+                    {% set preferencje = current_user.preferencje_gatunkowe or {} %}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        {% for gatunek in domyslne_gatunki %}
+                        <!-- Domyślna wartość to 5, jeżeli użytkownik jeszcze nie oceniał -->
+                        {% set wartosc = preferencje.get(gatunek, 5) %}
+                        
+                        <div class="bg-slate-50 dark:bg-white/5 p-4 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-pink-300 dark:hover:border-pink-500/30 transition-colors shadow-sm">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-bold text-slate-700 dark:text-gray-200">{{ gatunek }}</span>
+                                <div class="flex items-center gap-1 text-teal-600 dark:text-teal-300 font-bold bg-teal-100 dark:bg-teal-500/10 px-2 py-1 rounded-md text-sm border border-teal-200 dark:border-teal-500/20">
+                                    <i data-lucide="star" class="w-3 h-3 fill-current"></i> 
+                                    <span id="val-{{ loop.index }}">{{ wartosc }}</span>/10
+                                </div>
+                            </div>
+                            
+                            <!-- input type="range" z atrybutem oninput do dynamicznej zmiany numerka bez Reacta -->
+                            <input 
+                                type="range" 
+                                name="pref_{{ gatunek }}" 
+                                min="1" 
+                                max="10" 
+                                value="{{ wartosc }}"
+                                oninput="document.getElementById('val-{{ loop.index }}').innerText = this.value"
+                                class="w-full h-2 bg-slate-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-pink-500 dark:accent-pink-400" 
+                            />
+                            
+                            <div class="flex justify-between text-[10px] text-slate-400 dark:text-gray-500 font-bold mt-1">
+                                <span>Nie znoszę</span>
+                                <span>Uwielbiam</span>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
 
                 <div class="mt-8 pt-6 border-t border-slate-200 dark:border-white/10 flex justify-end">
                     <button type="submit" class="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-xl hover:shadow-lg transition-all hover:scale-105">
-                        <i data-lucide="save" class="w-4 h-4"></i> Zapisz zmiany
+                        <i data-lucide="save" class="w-4 h-4"></i> Zapisz ustawienia
                     </button>
                 </div>
             </form>
